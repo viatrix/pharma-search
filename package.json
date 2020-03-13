@@ -1,0 +1,33 @@
+{
+  "name": "pharma-search",
+  "version": "1.0.0",
+  "description": "Pharma-search (aws, serverless, typescript, postgres, typeORM)",
+  "main": "handler.js",
+  "scripts": {
+    "compile": "tsc --project tsconfig.json",
+    "start": "node build/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "source-map-support": "^0.5.10"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.17",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^10.12.18",
+    "fork-ts-checker-webpack-plugin": "^3.0.1",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.1.0",
+    "pg": "^7.18.2",
+    "reflect-metadata": "^0.1.13",
+    "serverless-webpack": "^5.2.0",
+    "ts-loader": "^5.3.3",
+    "typeorm": "^0.2.22",
+    "typescript": "^3.2.4",
+    "webpack": "^4.29.0",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "author": "",
+  "license": "",
+  "keywords": []
+}
