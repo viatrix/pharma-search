@@ -1,12 +1,23 @@
 import {S3Event, S3Handler} from 'aws-lambda';
+import {S3} from "aws-sdk";
 import 'source-map-support/register';
+import * as config from "../../config.json";
+import * as aws_config from "../../aws_config.json";
+import {ImportFileService} from "../services/importFileService";
 
 export const importFile: S3Handler = async (event, _context) => {
   if (!validateEvent(event)) {
     return;
   }
-  console.info(`File import is triggered for the file ${event.Records[0].s3.object.key}`);
+  const key = event.Records[0].s3.object.key;
+  console.info(`File import is triggered for the file ${key}`);
 
+  const data = await getFileContents(key);
+  console.log("Retrieved file from S3");
+  const importFileService = new ImportFileService();
+  await importFileService.init();
+  await importFileService.clearDb();
+  await importFileService.parseFile(data);
 };
 
 export const validateEvent = (event: S3Event): boolean => {
@@ -19,4 +30,22 @@ export const validateEvent = (event: S3Event): boolean => {
     return false;
   }
   return true;
+};
+
+export const getFileContents = async (key: string): Promise<string> => {
+  const s3 = new S3({
+    region: aws_config.region,
+    accessKeyId: aws_config.accessKeyId,
+    secretAccessKey: aws_config.secretAccessKey
+  });
+  try {
+    const result = await s3.getObject({
+      Bucket: config.s3.bucket,
+      Key: key
+    }).promise();
+    return result.Body.toString();
+  } catch(err) {
+    console.error(err);
+    return;
+  }
 };

@@ -11,5 +11,8 @@ jspm_packages
 # Environment config
 .env
 
+# AWS config
+aws_config.json
+
 # Build
 build

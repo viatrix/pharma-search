@@ -1,0 +1,21 @@
+{
+  "typeorm": {
+    "type": "postgres",
+    "port": 5432,
+    "database": "pharmadb",
+    "synchronize": true,
+    "logging": false,
+    "entities": [
+      "build/db/entity/**/*.js"
+    ],
+    "migrations": [
+      "build/db/migration/**/*.js"
+    ],
+    "subscribers": [
+      "build/db/subscriber/**/*.js"
+    ]
+  },
+  "s3": {
+    "bucket": "fda-files"
+  }
+}

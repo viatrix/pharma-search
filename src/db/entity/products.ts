@@ -1,12 +1,12 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn} from "typeorm";
-import {ProductIngredient} from "./product_ingredients";
-import {DosageForm} from "./dosage_forms";
+import {ProductIngredient} from "./productIngredients";
+import {DosageForm} from "./dosageForms";
 import {Applicant} from "./applicants";
 import {Route} from "./routes";
 
-export enum appl_types { ORIGINAL = "ORIGINAL", GENERIC = "GENERIC"}
+export enum Appl_types { ORIGINAL = "ORIGINAL", GENERIC = "GENERIC"}
 
-export enum access_types { RX = "RX", OTC = "OTC", DISCN = "DISCN"}
+export enum Access_types { RX = "RX", OTC = "OTC", DISCN = "DISCN"}
 
 @Entity()
 export class Product {
@@ -25,8 +25,8 @@ export class Product {
     @Column({type: "varchar", length: 20, nullable: true})
     applicant_short_name: string;
 
-    @Column({type: "enum", enum: appl_types})
-    appl_type: appl_types;
+    @Column({type: "enum", enum: Appl_types})
+    appl_type: Appl_types;
 
     @Column("int")
     appl_no: number;
@@ -46,8 +46,8 @@ export class Product {
     @Column("boolean")
     rs: boolean;
 
-    @Column({type: "enum", enum: access_types})
-    access_type: access_types;
+    @Column({type: "enum", enum: Access_types})
+    access_type: Access_types;
 
     @OneToMany(() => ProductIngredient, productIngredient => productIngredient.product)
     productIngredients: ProductIngredient[];
