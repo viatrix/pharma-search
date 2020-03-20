@@ -3,16 +3,16 @@
     "type": "postgres",
     "port": 5432,
     "database": "pharmadb",
-    "synchronize": true,
+    "synchronize": false,
     "logging": false,
     "entities": [
-      "build/db/entity/**/*.js"
+      "src/db/entity/**/*.js"
     ],
     "migrations": [
-      "build/db/migration/**/*.js"
+      "src/db/migration/**/*.js"
     ],
     "subscribers": [
-      "build/db/subscriber/**/*.js"
+      "src/db/subscriber/**/*.js"
     ]
   },
   "s3": {

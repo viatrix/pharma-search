@@ -13,10 +13,12 @@ export const importFile: S3Handler = async (event, _context) => {
   console.info(`File import is triggered for the file ${key}`);
 
   const data = await getFileContents(key);
-  console.log("Retrieved file from S3");
+  console.info("Retrieved file from S3");
   const importFileService = new ImportFileService();
   await importFileService.init();
+  console.info("Connected to DB");
   await importFileService.clearDb();
+  console.info("Cleared DB");
   await importFileService.parseFile(data);
 };
 
@@ -38,14 +40,13 @@ export const getFileContents = async (key: string): Promise<string> => {
     accessKeyId: aws_config.accessKeyId,
     secretAccessKey: aws_config.secretAccessKey
   });
-  try {
-    const result = await s3.getObject({
-      Bucket: config.s3.bucket,
-      Key: key
-    }).promise();
-    return result.Body.toString();
-  } catch(err) {
-    console.error(err);
-    return;
+  const result = await s3.getObject({
+    Bucket: config.s3.bucket,
+    Key: key
+  }).promise();
+  const contents = result.Body;
+  if (!contents) {
+    throw new Error("File contents was not retrieved");
   }
+  return contents.toString();
 };

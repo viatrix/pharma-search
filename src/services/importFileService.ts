@@ -1,4 +1,11 @@
-import {Connection, ConnectionOptions, createConnection, getConnection, DatabaseType, Repository} from "typeorm";
+import {
+  Connection,
+  ConnectionOptions,
+  createConnection,
+  getConnection,
+  DatabaseType,
+  Repository
+} from "typeorm";
 import "reflect-metadata";
 import {Access_types, Appl_types} from "../db/entity/products";
 import {Applicant} from "../db/entity/applicants";
@@ -38,7 +45,6 @@ export class ImportFileService {
   private routesRepository: Repository<Route>;
 
   public async init() {
-    console.log('init');
     const connectionOptions = {
       type: config.typeorm.type as DatabaseType,
       port: config.typeorm.port,
@@ -52,12 +58,11 @@ export class ImportFileService {
       migrations: config.typeorm.migrations,
       subscribers: config.typeorm.subscribers
     };
-    console.log(connectionOptions);
     if (!this.connection) {
       try {
         this.connection = getConnection();
       } catch(err) {
-        console.log(err);
+        console.info(err);
         if (err.name !== "ConnectionNotFoundError") {
           throw err;
         }
@@ -66,26 +71,20 @@ export class ImportFileService {
     if (!this.connection) {
       this.connection = await createConnection(connectionOptions as ConnectionOptions);
     }
-    console.log('Applicant');
     this.applicantsRepository = this.connection.getRepository(Applicant);
-    console.log('DosageForm');
     this.dosageFormsRepository = this.connection.getRepository(DosageForm);
-    console.log('Ingredient');
     this.ingredientsRepository = this.connection.getRepository(Ingredient);
-    console.log('ProductIngredient');
     this.productIngredientsRepository = this.connection.getRepository(ProductIngredient);
-    console.log('Product');
     this.productsRepository = this.connection.getRepository(Product);
-    console.log('Route');
     this.routesRepository = this.connection.getRepository(Route);
   }
 
   public async clearDb() {
+    await this.productIngredientsRepository.delete({});
+    await this.productsRepository.delete({});
     await this.applicantsRepository.delete({});
     await this.dosageFormsRepository.delete({});
     await this.ingredientsRepository.delete({});
-    await this.productIngredientsRepository.delete({});
-    await this.productsRepository.delete({});
     await this.routesRepository.delete({});
   }
 
@@ -93,72 +92,127 @@ export class ImportFileService {
     const dataWithoutHeaders = data.slice(data.indexOf("\n") + 1);
     const lines = dataWithoutHeaders.split("\n");
     for (const line of lines) {
-      const lineParts = line.split("~");
-      if (lineParts.length !== 14) {
-        throw new Error("File doesn't contain 14 columns separated by ~");
+      const trimmedLine = line.replace("\n", "");
+      if (trimmedLine.length) {
+        const product = this.parseLine(trimmedLine);
+        await this.saveToDb(product);
       }
-      const ingredients = lineParts[0].split(";");
-      const dosageForm = lineParts[1].slice(0, lineParts[1].indexOf(";"));
-      const route = lineParts[1].slice(lineParts[1].indexOf(";") + 1);
-      const tradeName = lineParts[2];
-      const applicant = lineParts[3];
-      const strength = lineParts[4].split(";");
-      const appl_type_string = lineParts[5];
-      let appl_type: Appl_types;
-      switch (appl_type_string) {
-        case "N":
-          appl_type = Appl_types.ORIGINAL;
-          break;
-        case "A":
-          appl_type = Appl_types.GENERIC;
-          break;
-        default:
-          throw new Error(`Invalid appl_type ${appl_type_string}`);
-      }
-      const appl_no = +lineParts[6];
-      const product_no = +lineParts[7];
-      const te_code = lineParts[8];
-      const approval_date = new Date(lineParts[9]);
-      const rld = lineParts[10] === "YES";
-      const rs = lineParts[11] === "YES";
-      const access_type_string = lineParts[12];
-      let access_type: Access_types;
-      switch (access_type_string) {
-        case "RX":
-          access_type = Access_types.RX;
-          break;
-        case "OTC":
-          access_type = Access_types.OTC;
-          break;
-        case "DISCN":
-          access_type = Access_types.DISCN;
-          break;
-        default:
-          throw new Error(`Invalid access_type ${access_type_string}`);
-      }
-      const applicant_full_name = lineParts[13];
-      const product: ProductType = {
-        ingredients,
-        dosageForm,
-        route,
-        tradeName,
-        applicant,
-        strength,
-        appl_type,
-        appl_no,
-        product_no,
-        te_code,
-        approval_date,
-        rld,
-        rs,
-        access_type,
-        applicant_full_name
-      };
-      await this.saveToDb(product);
     }
   };
 
-  private async saveToDb(product: ProductType) {
-    console.log(product);
+  public parseLine(line: string): ProductType {
+    const lineParts = line.split("~");
+    if (lineParts.length !== 14) {
+      throw new Error(`Line doesn't contain 14 columns separated by ~: ${line}`);
+    }
+    const ingredients = lineParts[0].split("; ");
+    const dosageForm = lineParts[1].slice(0, lineParts[1].indexOf(";"));
+    const route = lineParts[1].slice(lineParts[1].indexOf(";") + 1);
+    const tradeName = lineParts[2];
+    const applicant = lineParts[3];
+    const strength = lineParts[4].split(";");
+    const appl_type_string = lineParts[5];
+    let appl_type: Appl_types;
+    switch (appl_type_string) {
+      case "N":
+        appl_type = Appl_types.ORIGINAL;
+        break;
+      case "A":
+        appl_type = Appl_types.GENERIC;
+        break;
+      default:
+        throw new Error(`Invalid appl_type ${appl_type_string}`);
+    }
+    const appl_no = +lineParts[6];
+    const product_no = +lineParts[7];
+    const te_code = lineParts[8];
+    const approval_date = new Date(lineParts[9]);
+    const rld = lineParts[10] === "Yes";
+    const rs = lineParts[11] === "Yes";
+    const access_type_string = lineParts[12];
+    let access_type: Access_types;
+    switch (access_type_string) {
+      case "RX":
+        access_type = Access_types.RX;
+        break;
+      case "OTC":
+        access_type = Access_types.OTC;
+        break;
+      case "DISCN":
+        access_type = Access_types.DISCN;
+        break;
+      default:
+        throw new Error(`Invalid access_type ${access_type_string}`);
+    }
+    const applicant_full_name = lineParts[13];
+    const product = {
+      ingredients,
+      dosageForm,
+      route,
+      tradeName,
+      applicant,
+      strength,
+      appl_type,
+      appl_no,
+      product_no,
+      te_code,
+      approval_date,
+      rld,
+      rs,
+      access_type,
+      applicant_full_name
+    };
+    return product;
+  }
+
+  public async saveToDb(product: ProductType) {
+    console.info(product);
+    if (product.ingredients.length !== product.strength.length) {
+      throw new Error(`Incorrect list of ingredients and strength for ${product.tradeName}`);
+    }
+    let applicantEntry = await this.applicantsRepository.findOne(product.applicant);
+    if (!applicantEntry) {
+      applicantEntry = await this.applicantsRepository.save({
+        applicant_short_name: product.applicant,
+        applicant_full_name: product.applicant_full_name
+      });
+    }
+    let dosageFormEntry = await this.dosageFormsRepository.findOne({where: {dosage_form: product.dosageForm}});
+    if (!dosageFormEntry) {
+      dosageFormEntry = await this.dosageFormsRepository.save({
+        dosage_form: product.dosageForm
+      });
+    }
+    let routeEntry = await this.routesRepository.findOne({where: {route: product.route}});
+    if (!routeEntry) {
+      routeEntry = await this.routesRepository.save({
+        route: product.route
+      });
+    }
+    const productEntry = await this.productsRepository.save({
+      trade_name: product.tradeName,
+      dosage_form: dosageFormEntry,
+      route: routeEntry,
+      applicant: applicantEntry,
+      appl_type: product.appl_type,
+      appl_no: product.appl_no,
+      product_no: product.product_no,
+      te_code: product.te_code,
+      approval_date: product.approval_date,
+      rld: product.rld,
+      rs: product.rs,
+      access_type: product.access_type,
+    });
+    for (let i = 0; i < product.ingredients.length; i++) {
+      let ingredientEntry = await this.ingredientsRepository.findOne({where: {ingredient: product.ingredients[i]}});
+      if (!ingredientEntry) {
+        ingredientEntry = await this.ingredientsRepository.save({ingredient: product.ingredients[i]});
+      }
+      await this.productIngredientsRepository.save({
+        product: productEntry,
+        ingredient: ingredientEntry,
+        strength: product.strength[i]
+      })
+    }
   }
 }

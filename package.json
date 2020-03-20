@@ -5,7 +5,7 @@
   "main": "handler.js",
   "scripts": {
     "compile": "tsc --project tsconfig.json",
-    "start": "node build/index.js",
+    "start": "node build/src/index.js",
     "test": "jest"
   },
   "dependencies": {
@@ -19,14 +19,11 @@
     "@types/aws-lambda": "^8.10.17",
     "@types/jest": "^25.1.4",
     "@types/node": "^10.12.18",
-    "fork-ts-checker-webpack-plugin": "^3.0.1",
     "jest": "^25.1.0",
+    "serverless-plugin-typescript": "^1.1.9",
     "ts-jest": "^25.1.0",
-    "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.2.4",
-    "webpack": "^4.29.0",
-    "webpack-node-externals": "^1.7.2"
+    "typescript": "^3.8.3"
   },
   "author": "",
   "license": "",

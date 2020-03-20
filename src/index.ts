@@ -1,8 +1,11 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 
+console.log('init');
 createConnection()
-    .then(() => {
+  .then((connection) => {
     console.log('success');
+
     // here you can start to work with your entities
-}).catch(error => console.log(error));
+    console.log(connection.entityMetadatas);
+  }).catch(error => console.log(error));

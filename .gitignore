@@ -16,3 +16,4 @@ aws_config.json
 
 # Build
 build
+.build
