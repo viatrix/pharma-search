@@ -7,7 +7,7 @@ export class DosageForm {
     id: number;
 
     @Column({type: "varchar", length: 100})
-    dosage_form: string;
+    dosageForm: string;
 
     @OneToMany(() => Product, product => product.dosageForm)
     products: Product[];

@@ -2,18 +2,18 @@
 
 exports[`ParseLine should parse a line of data 1`] = `
 Object {
-  "access_type": "RX",
-  "appl_no": 207589,
-  "appl_type": "ORIGINAL",
+  "accessType": "RX",
+  "applNo": 207589,
+  "applType": "ORIGINAL",
   "applicant": "LEO PHARMA AS",
-  "applicant_full_name": "LEO PHARMA AS",
-  "approval_date": 2015-10-15T21:00:00.000Z,
+  "applicantFullName": "LEO PHARMA AS",
+  "approvalDate": 2015-10-15T21:00:00.000Z,
   "dosageForm": "AEROSOL, FOAM",
   "ingredients": Array [
     "BETAMETHASONE DIPROPIONATE",
     "CALCIPOTRIENE",
   ],
-  "product_no": 1,
+  "productNo": 1,
   "rld": true,
   "route": "TOPICAL",
   "rs": true,
@@ -21,7 +21,7 @@ Object {
     "0.064%",
     "0.005%",
   ],
-  "te_code": "",
+  "teCode": "",
   "tradeName": "ENSTILAR",
 }
 `;

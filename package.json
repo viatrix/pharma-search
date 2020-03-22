@@ -6,6 +6,7 @@
   "scripts": {
     "compile": "tsc --project tsconfig.json",
     "start": "node build/src/index.js",
+    "eslint": "./node_modules/.bin/eslint src/**/*.ts --fix",
     "test": "jest"
   },
   "dependencies": {
@@ -19,6 +20,14 @@
     "@types/aws-lambda": "^8.10.17",
     "@types/jest": "^25.1.4",
     "@types/node": "^10.12.18",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "jest": "^25.1.0",
     "serverless-plugin-typescript": "^1.1.9",
     "ts-jest": "^25.1.0",

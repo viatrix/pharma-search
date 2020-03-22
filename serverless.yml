@@ -25,13 +25,6 @@ provider:
     - subnet-e4ad5da8
 
 functions:
-  hello:
-    handler: src/handlers/handler.hello
-    events:
-      - http:
-          method: get
-          path: hello
-
   importFile:
     handler: src/handlers/importFile.importFile
     environment:
