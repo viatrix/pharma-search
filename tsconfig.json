@@ -13,7 +13,9 @@
     "noImplicitAny": true,
     "preserveConstEnums": true,
     "emitDecoratorMetadata": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "allowJs": true
   },
   "include": ["src/**/*"],
   "exclude": [

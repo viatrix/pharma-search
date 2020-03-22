@@ -1,12 +1,12 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn} from "typeorm";
-import {ProductIngredient} from "./product_ingredients";
-import {DosageForm} from "./dosage_forms";
+import {ProductIngredient} from "./productIngredients";
+import {DosageForm} from "./dosageForms";
 import {Applicant} from "./applicants";
 import {Route} from "./routes";
 
-export enum appl_types { ORIGINAL = "ORIGINAL", GENERIC = "GENERIC"}
+export enum ApplTypes { ORIGINAL = "ORIGINAL", GENERIC = "GENERIC"}
 
-export enum access_types { RX = "RX", OTC = "OTC", DISCN = "DISCN"}
+export enum AccessTypes { RX = "RX", OTC = "OTC", DISCN = "DISCN"}
 
 @Entity()
 export class Product {
@@ -14,31 +14,31 @@ export class Product {
     id: number;
 
     @Column()
-    trade_name: string;
+    tradeName: string;
 
     @Column({type: "int",  nullable: true})
-    dosage_form_id: number;
+    dosageFormId: number;
 
     @Column({type: "int",  nullable: true})
-    route_id: number;
+    routeId: number;
 
     @Column({type: "varchar", length: 20, nullable: true})
-    applicant_short_name: string;
+    applicantShortName: string;
 
-    @Column({type: "enum", enum: appl_types})
-    appl_type: appl_types;
+    @Column({type: "enum", enum: ApplTypes})
+    applType: ApplTypes;
 
     @Column("int")
-    appl_no: number;
+    applNo: number;
 
     @Column("smallint")
-    product_no: number;
+    productNo: number;
 
     @Column({type: "varchar", length: 20})
-    te_code: string;
+    teCode: string;
 
     @Column("date")
-    approval_date: Date;
+    approvalDate: Date;
 
     @Column("boolean")
     rld: boolean;
@@ -46,8 +46,8 @@ export class Product {
     @Column("boolean")
     rs: boolean;
 
-    @Column({type: "enum", enum: access_types})
-    access_type: access_types;
+    @Column({type: "enum", enum: AccessTypes})
+    accessType: AccessTypes;
 
     @OneToMany(() => ProductIngredient, productIngredient => productIngredient.product)
     productIngredients: ProductIngredient[];
