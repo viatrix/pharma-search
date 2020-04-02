@@ -25,3 +25,55 @@ Object {
   "tradeName": "ENSTILAR",
 }
 `;
+
+exports[`ParseLine should parse a line with braces in single ingredient 1`] = `
+Object {
+  "accessType": "RX",
+  "applNo": 21626,
+  "applType": "ORIGINAL",
+  "applicant": "HEYL CHEMISCH",
+  "applicantFullName": "HEYL CHEMISCH PHARMAZEUTISHE FABRIK",
+  "approvalDate": 2003-10-01T21:00:00.000Z,
+  "dosageForm": "CAPSULE",
+  "ingredients": Array [
+    "FERRIC HEXACYANOFERRATE(II)",
+  ],
+  "productNo": 1,
+  "rld": true,
+  "route": "ORAL",
+  "rs": true,
+  "strength": Array [
+    "500MG",
+  ],
+  "teCode": "",
+  "tradeName": "RADIOGARDASE (PRUSSIAN BLUE)",
+}
+`;
+
+exports[`ParseLine should parse a line with complex ingredients 1`] = `
+Object {
+  "accessType": "RX",
+  "applNo": 20725,
+  "applType": "ORIGINAL",
+  "applicant": "ABBVIE",
+  "applicantFullName": "ABBVIE INC",
+  "approvalDate": 2009-04-29T21:00:00.000Z,
+  "dosageForm": "CAPSULE, DELAYED RELEASE",
+  "ingredients": Array [
+    "AMYLASE",
+    "LIPASE",
+    "PROTEASE",
+  ],
+  "productNo": 2,
+  "rld": true,
+  "route": "ORAL",
+  "rs": false,
+  "strength": Array [
+    "60,000USP UNITS",
+    "12,000USP UNITS",
+    "38,000USP UNITS",
+  ],
+  "teCode": "",
+  "tradeName": "CREON",
+}
+`;

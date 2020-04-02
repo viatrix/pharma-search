@@ -51,6 +51,18 @@ describe("ParseLine", () => {
     expect(product).toMatchSnapshot();
   });
 
+  it("should parse a line with complex ingredients", async () => {
+    const testLine = "PANCRELIPASE (AMYLASE;LIPASE;PROTEASE)~CAPSULE, DELAYED RELEASE;ORAL~CREON~ABBVIE~60,000USP UNITS;12,000USP UNITS;38,000USP UNITS~N~020725~002~~Apr 30, 2009~Yes~No~RX~ABBVIE INC";
+    const product = await importFileService.parseLine(testLine);
+    expect(product).toMatchSnapshot();
+  });
+
+  it("should parse a line with braces in single ingredient", async () => {
+    const testLine = "FERRIC HEXACYANOFERRATE(II)~CAPSULE;ORAL~RADIOGARDASE (PRUSSIAN BLUE)~HEYL CHEMISCH~500MG~N~021626~001~~Oct 2, 2003~Yes~Yes~RX~HEYL CHEMISCH PHARMAZEUTISHE FABRIK";
+    const product = await importFileService.parseLine(testLine);
+    expect(product).toMatchSnapshot();
+  });
+
   it("should NOT parse a line of data if number of columns is less than 14", async () => {
     const testLine = "test string";
     try {

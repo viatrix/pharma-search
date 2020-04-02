@@ -115,7 +115,14 @@ export class ImportFileService {
     if (lineParts.length !== 14) {
       throw new Error(`Line doesn't contain 14 columns separated by ~: ${line}`);
     }
-    const ingredients = lineParts[0].split('; ');
+    const rawIngredients = lineParts[0];
+    let ingredients: string[];
+    if (rawIngredients.includes(' (')) {
+      const basicIngredients = rawIngredients.slice(rawIngredients.indexOf(' (') + 2, rawIngredients.indexOf(')'));
+      ingredients = basicIngredients.split(';');
+    } else {
+      ingredients = rawIngredients.split('; ');
+    }
     const dosageForm = lineParts[1].slice(0, lineParts[1].indexOf(';'));
     const route = lineParts[1].slice(lineParts[1].indexOf(';') + 1);
     const tradeName = lineParts[2];

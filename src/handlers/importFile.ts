@@ -27,7 +27,7 @@ export const getFileContents = async (key: string): Promise<string> => {
     Bucket: config.s3.bucket,
     Key: key
   }).createReadStream();
-  let contents = "";
+  let contents = '';
   for await (const chunk of readStream) {
     contents = contents.concat(chunk.toString());
   }
