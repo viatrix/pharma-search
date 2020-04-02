@@ -64,17 +64,22 @@ export class ImportFileService {
       migrations: config.typeorm.migrations,
       subscribers: config.typeorm.subscribers
     };
+    console.log(connectionOptions);
     if (!this.connection) {
       try {
         this.connection = getConnection();
       } catch (err) {
-        if (err.name !== 'ConnectionNotFoundError') {
+        if (err.name === 'ConnectionNotFoundError') {
+          console.info('Connection did not exist');
+        } else {
           throw err;
         }
       }
     }
     if (!this.connection) {
+      console.info('Trying to connect to db...');
       this.connection = await createConnection(connectionOptions as ConnectionOptions);
+      console.info('Connected to db');
     }
     this.applicantsRepository = this.connection.getRepository(Applicant);
     this.dosageFormsRepository = this.connection.getRepository(DosageForm);

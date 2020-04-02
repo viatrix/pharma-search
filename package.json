@@ -5,7 +5,7 @@
   "main": "handler.js",
   "scripts": {
     "compile": "tsc --project tsconfig.json",
-    "start": "node build/src/index.js",
+    "migrate": "node build/src/migrate.js",
     "eslint": "./node_modules/.bin/eslint src/**/*.ts --fix",
     "test": "jest",
     "precommit": "npm run eslint && npm run compile && npm run test"
@@ -16,11 +16,11 @@
     }
   },
   "dependencies": {
-    "source-map-support": "^0.5.10",
     "aws-sdk": "^2.639.0",
-    "typeorm": "^0.2.22",
+    "pg": "^7.18.2",
     "reflect-metadata": "^0.1.13",
-    "pg": "^7.18.2"
+    "source-map-support": "^0.5.10",
+    "typeorm": "^0.2.22"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",

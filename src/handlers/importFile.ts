@@ -23,11 +23,14 @@ export const getFileContents = async (key: string): Promise<string> => {
     accessKeyId: awsConfig.accessKeyId,
     secretAccessKey: awsConfig.secretAccessKey
   });
-  const result = await s3.getObject({
+  const readStream = await s3.getObject({
     Bucket: config.s3.bucket,
     Key: key
-  }).promise();
-  const contents = result.Body;
+  }).createReadStream();
+  let contents = "";
+  for await (const chunk of readStream) {
+    contents = contents.concat(chunk.toString());
+  }
   if (!contents) {
     throw new Error('File contents was not retrieved');
   }
