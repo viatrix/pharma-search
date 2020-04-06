@@ -77,9 +77,8 @@ export class ImportFileService {
       }
     }
     if (!this.connection) {
-      console.info('Trying to connect to db...');
       this.connection = await createConnection(connectionOptions as ConnectionOptions);
-      console.info('Connected to db');
+      console.info('Created a DB connection');
     }
     this.applicantsRepository = this.connection.getRepository(Applicant);
     this.dosageFormsRepository = this.connection.getRepository(DosageForm);
@@ -104,13 +103,22 @@ export class ImportFileService {
     for (const line of lines) {
       const trimmedLine = line.replace('\n', '');
       if (trimmedLine.length) {
-        const product = this.parseLine(trimmedLine);
-        await this.saveToDb(product);
+        try {
+          const product = this.parseLine(trimmedLine);
+          await this.saveToDb(product);
+        } catch (error) {
+          if (error.name === 'InconsistentIngredientsStrength') {
+            console.error(`Incorrect list of ingredients and strength in line ${trimmedLine}`);
+          } else {
+            throw error;
+          }
+        }
       }
     }
   }
 
   public parseLine (line: string): ProductType {
+    const FEDERAL_NOTE = ' **Federal Register determination that product was not discontinued or withdrawn for safety or efficacy reasons**';
     const lineParts = line.split('~');
     if (lineParts.length !== 14) {
       throw new Error(`Line doesn't contain 14 columns separated by ~: ${line}`);
@@ -127,7 +135,26 @@ export class ImportFileService {
     const route = lineParts[1].slice(lineParts[1].indexOf(';') + 1);
     const tradeName = lineParts[2];
     const applicant = lineParts[3];
-    const strength = lineParts[4].split(';');
+    let rawStrength = lineParts[4];
+    if (rawStrength.includes(FEDERAL_NOTE)) {
+      rawStrength = rawStrength.slice(0, rawStrength.indexOf(FEDERAL_NOTE));
+    }
+    let strength = rawStrength.split(';');
+    let balanced = true;
+    for (let i = 0; i < strength.length; i++) {
+      if (!this.bracketsBalanced(strength[i])) {
+        balanced = false;
+      }
+    }
+    if (!balanced) {
+      rawStrength = rawStrength.slice(rawStrength.indexOf(' (') + 2, rawStrength.indexOf(')'));
+      strength = rawStrength.split(';');
+    }
+    if (strength.length !== ingredients.length) {
+      const err = new Error(`Incorrect list of ingredients and strength for ${tradeName}`);
+      err.name = 'InconsistentIngredientsStrength';
+      throw err;
+    }
     const applTypeString = lineParts[5];
     let applType: ApplTypes;
     switch (applTypeString) {
@@ -179,6 +206,20 @@ export class ImportFileService {
       accessType,
       applicantFullName
     };
+  }
+
+  public bracketsBalanced (line: string): boolean {
+    let balanced = 0;
+    for (let i = 0; i < line.length; i++) {
+      switch (line[i]) {
+        case '(':
+          balanced += 1;
+          break;
+        case ')':
+          balanced -= 1;
+      }
+    }
+    return balanced === 0;
   }
 
   public async saveToDb (product: ProductType) {

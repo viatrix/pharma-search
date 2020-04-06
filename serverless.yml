@@ -27,7 +27,7 @@ provider:
 functions:
   importFile:
     handler: src/handlers/importFile.importFile
-    timeout: 30
+    timeout: 900
     environment:
       TYPEORM_HOST: ${ssm:/fda-search-db-host~true}
       TYPEORM_DATABASE: ${ssm:/fda-search-db-name~true}

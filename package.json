@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "tsc --project tsconfig.json",
     "migrate": "node build/src/migrate.js",
-    "eslint": "./node_modules/.bin/eslint src/**/*.ts --fix",
+    "eslint": "./node_modules/.bin/eslint src/**/*.{ts,spec.ts} --fix",
     "test": "jest",
     "precommit": "npm run eslint && npm run compile && npm run test"
   },
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.639.0",
+    "eslint-plugin-jest": "^23.8.2",
     "pg": "^7.18.2",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.10",

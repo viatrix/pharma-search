@@ -77,3 +77,79 @@ Object {
   "tradeName": "CREON",
 }
 `;
+
+exports[`ParseLine should parse a line with complex strength 1`] = `
+Object {
+  "accessType": "DISCN",
+  "applNo": 79138,
+  "applType": "GENERIC",
+  "applicant": "HOSPIRA",
+  "applicantFullName": "HOSPIRA INC",
+  "approvalDate": 2010-06-17T21:00:00.000Z,
+  "dosageForm": "INJECTABLE",
+  "ingredients": Array [
+    "ARTICAINE HYDROCHLORIDE",
+    "EPINEPHRINE BITARTRATE",
+  ],
+  "productNo": 1,
+  "rld": false,
+  "route": "INJECTION",
+  "rs": false,
+  "strength": Array [
+    "4%",
+    "EQ 0.01MG BASE/ML",
+  ],
+  "teCode": "",
+  "tradeName": "ARTICAINE HYDROCHLORIDE AND EPINEPHRINE BITARTRATE",
+}
+`;
+
+exports[`ParseLine should parse a line with complex strength with brackets 1`] = `
+Object {
+  "accessType": "RX",
+  "applNo": 204508,
+  "applType": "ORIGINAL",
+  "applicant": "BAXTER HLTHCARE CORP",
+  "applicantFullName": "BAXTER HEALTHCARE CORP",
+  "approvalDate": 2013-10-02T21:00:00.000Z,
+  "dosageForm": "EMULSION",
+  "ingredients": Array [
+    "OLIVE OIL",
+    "SOYBEAN OIL",
+  ],
+  "productNo": 1,
+  "rld": true,
+  "route": "INTRAVENOUS",
+  "rs": true,
+  "strength": Array [
+    "16%(160GM/1000ML)",
+    "4%  (40GM/1000ML)",
+  ],
+  "teCode": "",
+  "tradeName": "CLINOLIPID 20%",
+}
+`;
+
+exports[`ParseLine should remove federal note from strength 1`] = `
+Object {
+  "accessType": "DISCN",
+  "applNo": 22411,
+  "applType": "ORIGINAL",
+  "applicant": "ANGELINI PHARMA",
+  "applicantFullName": "ANGELINI PHARMA INC",
+  "approvalDate": 2010-02-01T22:00:00.000Z,
+  "dosageForm": "TABLET, EXTENDED RELEASE",
+  "ingredients": Array [
+    "TRAZODONE HYDROCHLORIDE",
+  ],
+  "productNo": 1,
+  "rld": true,
+  "route": "ORAL",
+  "rs": false,
+  "strength": Array [
+    "150MG",
+  ],
+  "teCode": "",
+  "tradeName": "OLEPTRO",
+}
+`;
