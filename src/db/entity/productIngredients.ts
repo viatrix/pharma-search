@@ -13,6 +13,6 @@ export class ProductIngredient {
     @ManyToOne(() => Ingredient, ingredient => ingredient.productIngredients)
     ingredient: Ingredient;
 
-    @Column({type: "varchar", length: 20, nullable: true})
+    @Column({type: "varchar", length: 150, nullable: true})
     strength: string;
 }
