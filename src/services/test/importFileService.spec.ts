@@ -10,16 +10,20 @@ describe('ParseFile', () => {
 
   it('should parse file with a header and one line of data', async () => {
     importFileService.parseLine = jest.fn();
-    const testData = 'Ingredient~DF;Route~Trade_Name~Applicant~Strength~Appl_Type~Appl_No~Product_No~TE_Code~Approval_Date~RLD~RS~Type~Applicant_Full_Name\n' +
+    const testData =
+      'Ingredient~DF;Route~Trade_Name~Applicant~Strength~Appl_Type~Appl_No~Product_No~TE_Code~Approval_Date~RLD~RS~Type~Applicant_Full_Name\n' +
       'BUDESONIDE~AEROSOL, FOAM;RECTAL~UCERIS~VALEANT PHARMS INTL~2MG/ACTUATION~N~205613~001~~Oct 7, 2014~Yes~Yes~RX~VALEANT PHARMACEUTICALS INTERNATIONAL';
     await importFileService.parseFile(testData);
     expect(importFileService.parseLine).toHaveBeenCalledTimes(1);
-    expect(importFileService.parseLine).toBeCalledWith('BUDESONIDE~AEROSOL, FOAM;RECTAL~UCERIS~VALEANT PHARMS INTL~2MG/ACTUATION~N~205613~001~~Oct 7, 2014~Yes~Yes~RX~VALEANT PHARMACEUTICALS INTERNATIONAL');
+    expect(importFileService.parseLine).toBeCalledWith(
+      'BUDESONIDE~AEROSOL, FOAM;RECTAL~UCERIS~VALEANT PHARMS INTL~2MG/ACTUATION~N~205613~001~~Oct 7, 2014~Yes~Yes~RX~VALEANT PHARMACEUTICALS INTERNATIONAL'
+    );
   });
 
   it('should parse all lines of a file', async () => {
     importFileService.parseLine = jest.fn();
-    const testData = 'Ingredient~DF;Route~Trade_Name~Applicant~Strength~Appl_Type~Appl_No~Product_No~TE_Code~Approval_Date~RLD~RS~Type~Applicant_Full_Name\n' +
+    const testData =
+      'Ingredient~DF;Route~Trade_Name~Applicant~Strength~Appl_Type~Appl_No~Product_No~TE_Code~Approval_Date~RLD~RS~Type~Applicant_Full_Name\n' +
       'BUDESONIDE~AEROSOL, FOAM;RECTAL~UCERIS~VALEANT PHARMS INTL~2MG/ACTUATION~N~205613~001~~Oct 7, 2014~Yes~Yes~RX~VALEANT PHARMACEUTICALS INTERNATIONAL\n' +
       'MINOCYCLINE HYDROCHLORIDE~AEROSOL, FOAM;TOPICAL~AMZEEQ~FOAMIX~EQ 4% BASE~N~212379~001~~Oct 18, 2019~Yes~Yes~RX~FOAMIX PHARMACEUTICALS INC\n' +
       'BETAMETHASONE VALERATE~AEROSOL, FOAM;TOPICAL~BETAMETHASONE VALERATE~PERRIGO UK FINCO~0.12%~A~078337~001~AB~Nov 26, 2012~No~No~RX~PERRIGO UK FINCO LTD PARTNERSHIP\n' +
@@ -46,37 +50,43 @@ describe('ParseLine', () => {
   });
 
   it('should parse a line of data', async () => {
-    const testLine = 'BETAMETHASONE DIPROPIONATE; CALCIPOTRIENE~AEROSOL, FOAM;TOPICAL~ENSTILAR~LEO PHARMA AS~0.064%;0.005%~N~207589~001~~Oct 16, 2015~Yes~Yes~RX~LEO PHARMA AS';
+    const testLine =
+      'BETAMETHASONE DIPROPIONATE; CALCIPOTRIENE~AEROSOL, FOAM;TOPICAL~ENSTILAR~LEO PHARMA AS~0.064%;0.005%~N~207589~001~~Oct 16, 2015~Yes~Yes~RX~LEO PHARMA AS';
     const product = await importFileService.parseLine(testLine);
     expect(product).toMatchSnapshot();
   });
 
   it('should parse a line with complex ingredients', async () => {
-    const testLine = 'PANCRELIPASE (AMYLASE;LIPASE;PROTEASE)~CAPSULE, DELAYED RELEASE;ORAL~CREON~ABBVIE~60,000USP UNITS;12,000USP UNITS;38,000USP UNITS~N~020725~002~~Apr 30, 2009~Yes~No~RX~ABBVIE INC';
+    const testLine =
+      'PANCRELIPASE (AMYLASE;LIPASE;PROTEASE)~CAPSULE, DELAYED RELEASE;ORAL~CREON~ABBVIE~60,000USP UNITS;12,000USP UNITS;38,000USP UNITS~N~020725~002~~Apr 30, 2009~Yes~No~RX~ABBVIE INC';
     const product = await importFileService.parseLine(testLine);
     expect(product).toMatchSnapshot();
   });
 
   it('should parse a line with braces in single ingredient', async () => {
-    const testLine = 'FERRIC HEXACYANOFERRATE(II)~CAPSULE;ORAL~RADIOGARDASE (PRUSSIAN BLUE)~HEYL CHEMISCH~500MG~N~021626~001~~Oct 2, 2003~Yes~Yes~RX~HEYL CHEMISCH PHARMAZEUTISHE FABRIK';
+    const testLine =
+      'FERRIC HEXACYANOFERRATE(II)~CAPSULE;ORAL~RADIOGARDASE (PRUSSIAN BLUE)~HEYL CHEMISCH~500MG~N~021626~001~~Oct 2, 2003~Yes~Yes~RX~HEYL CHEMISCH PHARMAZEUTISHE FABRIK';
     const product = await importFileService.parseLine(testLine);
     expect(product).toMatchSnapshot();
   });
 
   it('should parse a line with complex strength', async () => {
-    const testLine = 'ARTICAINE HYDROCHLORIDE; EPINEPHRINE BITARTRATE~INJECTABLE;INJECTION~ARTICAINE HYDROCHLORIDE AND EPINEPHRINE BITARTRATE~HOSPIRA~4%;EQ 0.017MG BASE/1.7ML (4%;EQ 0.01MG BASE/ML)~A~079138~001~~Jun 18, 2010~No~No~DISCN~HOSPIRA INC';
+    const testLine =
+      'ARTICAINE HYDROCHLORIDE; EPINEPHRINE BITARTRATE~INJECTABLE;INJECTION~ARTICAINE HYDROCHLORIDE AND EPINEPHRINE BITARTRATE~HOSPIRA~4%;EQ 0.017MG BASE/1.7ML (4%;EQ 0.01MG BASE/ML)~A~079138~001~~Jun 18, 2010~No~No~DISCN~HOSPIRA INC';
     const product = await importFileService.parseLine(testLine);
     expect(product).toMatchSnapshot();
   });
 
   it('should parse a line with complex strength with brackets', async () => {
-    const testLine = 'OLIVE OIL; SOYBEAN OIL~EMULSION;INTRAVENOUS~CLINOLIPID 20%~BAXTER HLTHCARE CORP~16%(160GM/1000ML);4%  (40GM/1000ML)~N~204508~001~~Oct 3, 2013~Yes~Yes~RX~BAXTER HEALTHCARE CORP';
+    const testLine =
+      'OLIVE OIL; SOYBEAN OIL~EMULSION;INTRAVENOUS~CLINOLIPID 20%~BAXTER HLTHCARE CORP~16%(160GM/1000ML);4%  (40GM/1000ML)~N~204508~001~~Oct 3, 2013~Yes~Yes~RX~BAXTER HEALTHCARE CORP';
     const product = await importFileService.parseLine(testLine);
     expect(product).toMatchSnapshot();
   });
 
   it('should remove federal note from strength', async () => {
-    const testLine = 'TRAZODONE HYDROCHLORIDE~TABLET, EXTENDED RELEASE;ORAL~OLEPTRO~ANGELINI PHARMA~150MG **Federal Register determination that product was not discontinued or withdrawn for safety or efficacy reasons**~N~022411~001~~Feb 2, 2010~Yes~No~DISCN~ANGELINI PHARMA INC';
+    const testLine =
+      'TRAZODONE HYDROCHLORIDE~TABLET, EXTENDED RELEASE;ORAL~OLEPTRO~ANGELINI PHARMA~150MG **Federal Register determination that product was not discontinued or withdrawn for safety or efficacy reasons**~N~022411~001~~Feb 2, 2010~Yes~No~DISCN~ANGELINI PHARMA INC';
     const product = await importFileService.parseLine(testLine);
     expect(product).toMatchSnapshot();
   });
@@ -86,21 +96,27 @@ describe('ParseLine', () => {
     try {
       await importFileService.parseLine(testLine);
     } catch (err) {
-      expect(err.message).toEqual("Line doesn't contain 14 columns separated by ~: test string");
+      expect(err.message).toEqual(
+        "Line doesn't contain 14 columns separated by ~: test string"
+      );
     }
   });
 
   it('should NOT parse file if number of columns is more than 14', async () => {
-    const testLine = 'col1~col2~col3~col4~col5~col6~col7~col8~col9~col10~col11~col12~col13~col14~col15';
+    const testLine =
+      'col1~col2~col3~col4~col5~col6~col7~col8~col9~col10~col11~col12~col13~col14~col15';
     try {
       await importFileService.parseLine(testLine);
     } catch (err) {
-      expect(err.message).toEqual("Line doesn't contain 14 columns separated by ~: col1~col2~col3~col4~col5~col6~col7~col8~col9~col10~col11~col12~col13~col14~col15");
+      expect(err.message).toEqual(
+        "Line doesn't contain 14 columns separated by ~: col1~col2~col3~col4~col5~col6~col7~col8~col9~col10~col11~col12~col13~col14~col15"
+      );
     }
   });
 
   it("should NOT parse file if appl_type is not 'N' or 'A'", async () => {
-    const testLine = 'BUDESONIDE~AEROSOL, FOAM;RECTAL~UCERIS~VALEANT PHARMS INTL~2MG/ACTUATION~wrong_appl_type~205613~001~~Oct 7, 2014~Yes~Yes~RX~VALEANT PHARMACEUTICALS INTERNATIONAL\n';
+    const testLine =
+      'BUDESONIDE~AEROSOL, FOAM;RECTAL~UCERIS~VALEANT PHARMS INTL~2MG/ACTUATION~wrong_appl_type~205613~001~~Oct 7, 2014~Yes~Yes~RX~VALEANT PHARMACEUTICALS INTERNATIONAL\n';
     try {
       await importFileService.parseLine(testLine);
     } catch (err) {
@@ -109,7 +125,8 @@ describe('ParseLine', () => {
   });
 
   it('should NOT parse file if access type is not valid', async () => {
-    const testLine = 'BUDESONIDE~AEROSOL, FOAM;RECTAL~UCERIS~VALEANT PHARMS INTL~2MG/ACTUATION~N~205613~001~~Oct 7, 2014~Yes~Yes~wrong_access_type~VALEANT PHARMACEUTICALS INTERNATIONAL\n';
+    const testLine =
+      'BUDESONIDE~AEROSOL, FOAM;RECTAL~UCERIS~VALEANT PHARMS INTL~2MG/ACTUATION~N~205613~001~~Oct 7, 2014~Yes~Yes~wrong_access_type~VALEANT PHARMACEUTICALS INTERNATIONAL\n';
     try {
       await importFileService.parseLine(testLine);
     } catch (err) {

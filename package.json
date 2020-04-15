@@ -8,6 +8,7 @@
     "migrate": "node build/src/migrate.js",
     "test-local": "node build/src/test_local.js",
     "eslint": "./node_modules/.bin/eslint src/**/*.{ts,spec.ts} --fix",
+    "prettier": "./node_modules/.bin/prettier src/**/*.{ts,spec.ts} --write",
     "test": "jest",
     "precommit": "npm run eslint && npm run build && npm run test"
   },
@@ -43,6 +44,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.2.3",
     "jest": "^25.1.0",
+    "prettier": "^2.0.4",
     "serverless-plugin-typescript": "^1.1.9",
     "ts-jest": "^25.1.0",
     "ts-loader": "^5.3.3",

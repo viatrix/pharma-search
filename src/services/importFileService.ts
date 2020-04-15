@@ -18,37 +18,37 @@ import * as config from '../../config.json';
 import 'pg';
 
 export type ProductType = {
-  ingredients: string[];
-  dosageForm: string;
-  route: string;
-  tradeName: string;
-  applicant: string;
-  strength: string[];
-  applType: ApplTypes;
-  applNo: number;
-  productNo: number;
-  teCode: string;
-  approvalDate: Date;
-  rld: boolean;
-  rs: boolean;
-  accessType: AccessTypes;
-  applicantFullName: string;
-};
+  ingredients: string[]
+  dosageForm: string
+  route: string
+  tradeName: string
+  applicant: string
+  strength: string[]
+  applType: ApplTypes
+  applNo: number
+  productNo: number
+  teCode: string
+  approvalDate: Date
+  rld: boolean
+  rs: boolean
+  accessType: AccessTypes
+  applicantFullName: string
+}
 
 export class ImportFileService {
-  private connection: Connection;
+  private connection: Connection
 
-  private applicantsRepository: Repository<Applicant>;
+  private applicantsRepository: Repository<Applicant>
 
-  private dosageFormsRepository: Repository<DosageForm>;
+  private dosageFormsRepository: Repository<DosageForm>
 
-  private ingredientsRepository: Repository<Ingredient>;
+  private ingredientsRepository: Repository<Ingredient>
 
-  private productIngredientsRepository: Repository<ProductIngredient>;
+  private productIngredientsRepository: Repository<ProductIngredient>
 
-  private productsRepository: Repository<Product>;
+  private productsRepository: Repository<Product>
 
-  private routesRepository: Repository<Route>;
+  private routesRepository: Repository<Route>
 
   public async init () {
     const connectionOptions = {
@@ -77,13 +77,17 @@ export class ImportFileService {
       }
     }
     if (!this.connection) {
-      this.connection = await createConnection(connectionOptions as ConnectionOptions);
+      this.connection = await createConnection(
+        connectionOptions as ConnectionOptions
+      );
       console.info('Created a DB connection');
     }
     this.applicantsRepository = this.connection.getRepository(Applicant);
     this.dosageFormsRepository = this.connection.getRepository(DosageForm);
     this.ingredientsRepository = this.connection.getRepository(Ingredient);
-    this.productIngredientsRepository = this.connection.getRepository(ProductIngredient);
+    this.productIngredientsRepository = this.connection.getRepository(
+      ProductIngredient
+    );
     this.productsRepository = this.connection.getRepository(Product);
     this.routesRepository = this.connection.getRepository(Route);
   }
@@ -108,7 +112,9 @@ export class ImportFileService {
           await this.saveToDb(product);
         } catch (error) {
           if (error.name === 'InconsistentIngredientsStrength') {
-            console.error(`Incorrect list of ingredients and strength in line ${trimmedLine}`);
+            console.error(
+              `Incorrect list of ingredients and strength in line ${trimmedLine}`
+            );
           } else {
             throw error;
           }
@@ -118,7 +124,8 @@ export class ImportFileService {
   }
 
   public parseLine (line: string): ProductType {
-    const FEDERAL_NOTE = ' **Federal Register determination that product was not discontinued or withdrawn for safety or efficacy reasons**';
+    const FEDERAL_NOTE =
+      ' **Federal Register determination that product was not discontinued or withdrawn for safety or efficacy reasons**';
     const lineParts = line.split('~');
     if (lineParts.length !== 14) {
       throw new Error(`Line doesn't contain 14 columns separated by ~: ${line}`);
@@ -126,7 +133,10 @@ export class ImportFileService {
     const rawIngredients = lineParts[0];
     let ingredients: string[];
     if (rawIngredients.includes(' (')) {
-      const basicIngredients = rawIngredients.slice(rawIngredients.indexOf(' (') + 2, rawIngredients.indexOf(')'));
+      const basicIngredients = rawIngredients.slice(
+        rawIngredients.indexOf(' (') + 2,
+        rawIngredients.indexOf(')')
+      );
       ingredients = basicIngredients.split(';');
     } else {
       ingredients = rawIngredients.split('; ');
@@ -147,11 +157,16 @@ export class ImportFileService {
       }
     }
     if (!balanced) {
-      rawStrength = rawStrength.slice(rawStrength.indexOf(' (') + 2, rawStrength.indexOf(')'));
+      rawStrength = rawStrength.slice(
+        rawStrength.indexOf(' (') + 2,
+        rawStrength.indexOf(')')
+      );
       strength = rawStrength.split(';');
     }
     if (strength.length !== ingredients.length) {
-      const err = new Error(`Incorrect list of ingredients and strength for ${tradeName}`);
+      const err = new Error(
+        `Incorrect list of ingredients and strength for ${tradeName}`
+      );
       err.name = 'InconsistentIngredientsStrength';
       throw err;
     }
@@ -224,22 +239,30 @@ export class ImportFileService {
 
   public async saveToDb (product: ProductType) {
     if (product.ingredients.length !== product.strength.length) {
-      throw new Error(`Incorrect list of ingredients and strength for ${product.tradeName}`);
+      throw new Error(
+        `Incorrect list of ingredients and strength for ${product.tradeName}`
+      );
     }
-    let applicantEntry = await this.applicantsRepository.findOne(product.applicant);
+    let applicantEntry = await this.applicantsRepository.findOne(
+      product.applicant
+    );
     if (!applicantEntry) {
       applicantEntry = await this.applicantsRepository.save({
         applicantShortName: product.applicant,
         applicantFullName: product.applicantFullName
       });
     }
-    let dosageFormEntry = await this.dosageFormsRepository.findOne({ where: { dosageForm: product.dosageForm } });
+    let dosageFormEntry = await this.dosageFormsRepository.findOne({
+      where: { dosageForm: product.dosageForm }
+    });
     if (!dosageFormEntry) {
       dosageFormEntry = await this.dosageFormsRepository.save({
         dosageForm: product.dosageForm
       });
     }
-    let routeEntry = await this.routesRepository.findOne({ where: { route: product.route } });
+    let routeEntry = await this.routesRepository.findOne({
+      where: { route: product.route }
+    });
     if (!routeEntry) {
       routeEntry = await this.routesRepository.save({
         route: product.route
@@ -260,9 +283,13 @@ export class ImportFileService {
       accessType: product.accessType
     });
     for (let i = 0; i < product.ingredients.length; i++) {
-      let ingredientEntry = await this.ingredientsRepository.findOne({ where: { ingredient: product.ingredients[i] } });
+      let ingredientEntry = await this.ingredientsRepository.findOne({
+        where: { ingredient: product.ingredients[i] }
+      });
       if (!ingredientEntry) {
-        ingredientEntry = await this.ingredientsRepository.save({ ingredient: product.ingredients[i] });
+        ingredientEntry = await this.ingredientsRepository.save({
+          ingredient: product.ingredients[i]
+        });
       }
       await this.productIngredientsRepository.save({
         product: productEntry,

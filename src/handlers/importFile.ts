@@ -23,10 +23,12 @@ export const getFileContents = async (key: string): Promise<string> => {
     accessKeyId: awsConfig.accessKeyId,
     secretAccessKey: awsConfig.secretAccessKey
   });
-  const readStream = await s3.getObject({
-    Bucket: config.s3.bucket,
-    Key: key
-  }).createReadStream();
+  const readStream = await s3
+    .getObject({
+      Bucket: config.s3.bucket,
+      Key: key
+    })
+    .createReadStream();
   let contents = '';
   for await (const chunk of readStream) {
     contents = contents.concat(chunk.toString());

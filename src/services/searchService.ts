@@ -13,8 +13,8 @@ import 'pg';
 import { ParsedUrlQuery } from 'querystring';
 
 export class SearchService {
-  private connection: Connection;
-  private productsRepository: Repository<Product>;
+  private connection: Connection
+  private productsRepository: Repository<Product>
 
   public async init () {
     const connectionOptions = {
@@ -43,7 +43,9 @@ export class SearchService {
       }
     }
     if (!this.connection) {
-      this.connection = await createConnection(connectionOptions as ConnectionOptions);
+      this.connection = await createConnection(
+        connectionOptions as ConnectionOptions
+      );
       console.info('Created a DB connection');
     }
     this.productsRepository = this.connection.getRepository(Product);
@@ -60,7 +62,9 @@ export class SearchService {
       .innerJoinAndSelect('product.productIngredients', 'productIngredient')
       .innerJoinAndSelect('productIngredient.ingredient', 'ingredient')
       .where("product.tradeName ILIKE :tradename || '%'", { tradename })
-      .andWhere("ingredient.ingredient ILIKE :ingredient || '%'", { ingredient })
+      .andWhere("ingredient.ingredient ILIKE :ingredient || '%'", {
+        ingredient
+      })
       .getMany();
     return result;
   }
