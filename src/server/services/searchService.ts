@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import 'reflect-metadata';
 import { Product } from '../db/entity/products';
-import * as config from '../../config.json';
+import * as config from '../../../config.json';
 import 'pg';
 import { ParsedUrlQuery } from 'querystring';
 

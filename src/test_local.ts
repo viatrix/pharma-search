@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
-import {Product} from "./db/entity/products";
+import {Product} from "./server/db/entity/products";
 
 console.log('init');
 createConnection()

@@ -1,8 +1,8 @@
 import { S3Event, S3Handler } from 'aws-lambda';
 import { S3 } from 'aws-sdk';
 import 'source-map-support/register';
-import * as config from '../../config.json';
-import * as awsConfig from '../../awsConfig.json';
+import * as config from '../../../config.json';
+import * as awsConfig from '../../../awsConfig.json';
 import { ImportFileService } from '../services/importFileService';
 
 export const validateEvent = (event: S3Event): boolean => {

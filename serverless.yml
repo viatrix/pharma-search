@@ -26,11 +26,12 @@ provider:
 
 package: # Optional deployment packaging configuration
   include: # Specify the directories and files which should be included in the deployment package
-    - src/**
+    - src/server/**
+    - src/client/**
 
 functions:
   importFile:
-    handler: src/handlers/importFile.importFile
+    handler: src/server/handlers/importFile.importFile
     timeout: 900
     environment:
       TYPEORM_HOST: ${ssm:/fda-search-db-host~true}
@@ -42,7 +43,7 @@ functions:
         event: s3:ObjectCreated:CompleteMultipartUpload*
 
   search:
-    handler: src/handlers/searchPage.search
+    handler: src/server/handlers/searchPage.search
     environment:
       TYPEORM_HOST: ${ssm:/fda-search-db-host~true}
       TYPEORM_DATABASE: ${ssm:/fda-search-db-name~true}

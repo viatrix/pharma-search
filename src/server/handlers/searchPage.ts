@@ -15,7 +15,7 @@ export const search = async (event: APIGatewayEvent) => {
     drugList = await searchService.search(parsedBody);
   }
   const htmlContent = fs.readFileSync(
-    path.join(__dirname, '/../client/searchPage.ejs'),
+    path.join(__dirname, '/../../client/searchPage.ejs'),
     'utf8'
   );
   const response = {

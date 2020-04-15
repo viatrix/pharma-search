@@ -6,10 +6,10 @@
     "synchronize": false,
     "logging": false,
     "entities": [
-      "src/db/entity/**/*.js"
+      "src/server/db/entity/**/*.js"
     ],
     "migrations": [
-      "src/db/migration/**/*.js"
+      "src/migration/**/*.js"
     ],
     "subscribers": [
       "src/db/subscriber/**/*.js"

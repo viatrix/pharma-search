@@ -14,7 +14,7 @@ import { Ingredient } from '../db/entity/ingredients';
 import { ProductIngredient } from '../db/entity/productIngredients';
 
 import { Route } from '../db/entity/routes';
-import * as config from '../../config.json';
+import * as config from '../../../config.json';
 import 'pg';
 
 export type ProductType = {
