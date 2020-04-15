@@ -24,6 +24,10 @@ provider:
       - subnet-c43087ae
       - subnet-e4ad5da8
 
+package: # Optional deployment packaging configuration
+  include: # Specify the directories and files which should be included in the deployment package
+    - src/**
+
 functions:
   importFile:
     handler: src/handlers/importFile.importFile
@@ -36,3 +40,19 @@ functions:
     events:
       - s3: ${file(./config.json):s3.bucket}
         event: s3:ObjectCreated:CompleteMultipartUpload*
+
+  search:
+    handler: src/handlers/searchPage.search
+    environment:
+      TYPEORM_HOST: ${ssm:/fda-search-db-host~true}
+      TYPEORM_DATABASE: ${ssm:/fda-search-db-name~true}
+      TYPEORM_USERNAME: ${ssm:/fda-search-db-username~true}
+      TYPEORM_PASSWORD: ${ssm:/fda-search-db-password~true}
+    events:
+      - http:
+          path: search
+          method: get
+      - http:
+          path: search
+          method: post
+

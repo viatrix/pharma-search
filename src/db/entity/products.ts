@@ -3,6 +3,7 @@ import {ProductIngredient} from "./productIngredients";
 import {DosageForm} from "./dosageForms";
 import {Applicant} from "./applicants";
 import {Route} from "./routes";
+import {Type} from "class-transformer";
 
 export enum ApplTypes { ORIGINAL = "ORIGINAL", GENERIC = "GENERIC"}
 
@@ -37,6 +38,7 @@ export class Product {
     @Column({type: "varchar", length: 20})
     teCode: string;
 
+    @Type(() => Date)
     @Column("date")
     approvalDate: Date;
 
