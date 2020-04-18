@@ -2,7 +2,6 @@ import {
   Connection,
   ConnectionOptions,
   createConnection,
-  getConnection,
   DatabaseType,
   Repository
 } from 'typeorm';
@@ -30,18 +29,7 @@ export class SearchService {
       migrations: config.typeorm.migrations,
       subscribers: config.typeorm.subscribers
     };
-    console.log(connectionOptions);
-    if (!this.connection) {
-      try {
-        this.connection = getConnection();
-      } catch (err) {
-        if (err.name === 'ConnectionNotFoundError') {
-          console.info('Connection did not exist');
-        } else {
-          throw err;
-        }
-      }
-    }
+    console.info(connectionOptions);
     if (!this.connection) {
       this.connection = await createConnection(
         connectionOptions as ConnectionOptions

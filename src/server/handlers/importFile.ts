@@ -1,11 +1,38 @@
-import { S3Event, S3Handler } from 'aws-lambda';
-import { S3 } from 'aws-sdk';
+import { S3Event } from 'aws-lambda';
 import 'source-map-support/register';
-import * as config from '../../../config.json';
-import * as awsConfig from '../../../awsConfig.json';
-import { ImportFileService } from '../services/importFileService';
+import { SaveToDbService } from '../services/saveToDbService';
+import {RetrieveFileContentsS3Service} from "../services/retrieveFileContentsS3Service";
+import {ParseLineStream} from "../services/parseLineStream";
 
-export const validateEvent = (event: S3Event): boolean => {
+export const importFile = async (event: S3Event) => {
+  if (!validateEvent(event)) {
+    return;
+  }
+  const { key } = event.Records[0].s3.object;
+  console.info(`File import is triggered for the file ${key}`);
+
+  const retrieveFileContentsS3Service = new RetrieveFileContentsS3Service();
+  const readCsvStream = await retrieveFileContentsS3Service.createStream(key);
+  console.info('Connected to the file from S3');
+  const parseLineStream = new ParseLineStream();
+  const saveToDbService = new SaveToDbService();
+  await saveToDbService.init();
+  console.info('Connected to DB');
+  await saveToDbService.clearDb();
+  console.info('Cleared DB');
+  await new Promise((resolve) => {
+    const writeStream = saveToDbService.saveToDbStream();
+    writeStream.on('finish', () => {
+      console.info('Import was finished successfully');
+      resolve();
+    });
+    readCsvStream
+      .pipe(parseLineStream)
+      .pipe(writeStream);
+  });
+};
+
+const validateEvent = (event: S3Event): boolean => {
   if (!event.Records || event.Records.length === 0) {
     console.error('Error! No files are uploaded');
     return false;
@@ -15,44 +42,4 @@ export const validateEvent = (event: S3Event): boolean => {
     return false;
   }
   return true;
-};
-
-export const getFileContents = async (key: string): Promise<string> => {
-  const s3 = new S3({
-    region: awsConfig.region,
-    accessKeyId: awsConfig.accessKeyId,
-    secretAccessKey: awsConfig.secretAccessKey
-  });
-  const readStream = await s3
-    .getObject({
-      Bucket: config.s3.bucket,
-      Key: key
-    })
-    .createReadStream();
-  let contents = '';
-  for await (const chunk of readStream) {
-    contents = contents.concat(chunk.toString());
-  }
-  if (!contents) {
-    throw new Error('File contents was not retrieved');
-  }
-  return contents.toString();
-};
-
-export const importFile: S3Handler = async (event) => {
-  if (!validateEvent(event)) {
-    return;
-  }
-  const { key } = event.Records[0].s3.object;
-  console.info(`File import is triggered for the file ${key}`);
-
-  const data = await getFileContents(key);
-  console.info('Retrieved file from S3');
-  const importFileService = new ImportFileService();
-  await importFileService.init();
-  console.info('Connected to DB');
-  await importFileService.clearDb();
-  console.info('Cleared DB');
-  await importFileService.parseFile(data);
-  console.info('Import was finished successfully');
 };

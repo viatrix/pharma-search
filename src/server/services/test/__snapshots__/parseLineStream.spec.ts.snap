@@ -1,32 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ParseLine should parse a line of data 1`] = `
-Object {
-  "accessType": "RX",
-  "applNo": 207589,
-  "applType": "ORIGINAL",
-  "applicant": "LEO PHARMA AS",
-  "applicantFullName": "LEO PHARMA AS",
-  "approvalDate": 2015-10-15T21:00:00.000Z,
-  "dosageForm": "AEROSOL, FOAM",
-  "ingredients": Array [
-    "BETAMETHASONE DIPROPIONATE",
-    "CALCIPOTRIENE",
-  ],
-  "productNo": 1,
-  "rld": true,
-  "route": "TOPICAL",
-  "rs": true,
-  "strength": Array [
-    "0.064%",
-    "0.005%",
-  ],
-  "teCode": "",
-  "tradeName": "ENSTILAR",
-}
-`;
-
-exports[`ParseLine should parse a line with braces in single ingredient 1`] = `
+exports[`ParseLineStream should parse a line with braces in single ingredient 1`] = `
 Object {
   "accessType": "RX",
   "applNo": 21626,
@@ -50,7 +24,7 @@ Object {
 }
 `;
 
-exports[`ParseLine should parse a line with complex ingredients 1`] = `
+exports[`ParseLineStream should parse a line with complex ingredients 1`] = `
 Object {
   "accessType": "RX",
   "applNo": 20725,
@@ -78,14 +52,14 @@ Object {
 }
 `;
 
-exports[`ParseLine should parse a line with complex strength 1`] = `
+exports[`ParseLineStream should parse a line with complex strength 1`] = `
 Object {
   "accessType": "DISCN",
   "applNo": 79138,
   "applType": "GENERIC",
   "applicant": "HOSPIRA",
   "applicantFullName": "HOSPIRA INC",
-  "approvalDate": 2010-06-17T21:00:00.000Z,
+  "approvalDate": 2003-10-01T21:00:00.000Z,
   "dosageForm": "INJECTABLE",
   "ingredients": Array [
     "ARTICAINE HYDROCHLORIDE",
@@ -104,13 +78,13 @@ Object {
 }
 `;
 
-exports[`ParseLine should parse a line with complex strength with brackets 1`] = `
+exports[`ParseLineStream should parse a line with complex strength with brackets 1`] = `
 Object {
   "accessType": "RX",
   "applNo": 204508,
   "applType": "ORIGINAL",
   "applicant": "BAXTER HLTHCARE CORP",
-  "applicantFullName": "BAXTER HEALTHCARE CORP",
+  "applicantFullName": "HOSPIRA INC",
   "approvalDate": 2013-10-02T21:00:00.000Z,
   "dosageForm": "EMULSION",
   "ingredients": Array [
@@ -130,7 +104,31 @@ Object {
 }
 `;
 
-exports[`ParseLine should remove federal note from strength 1`] = `
+exports[`ParseLineStream should parse one line of data 1`] = `
+Object {
+  "accessType": "RX",
+  "applNo": 205613,
+  "applType": "ORIGINAL",
+  "applicant": "VALEANT PHARMS INTL",
+  "applicantFullName": "VALEANT PHARMACEUTICALS INTERNATIONAL",
+  "approvalDate": 2014-10-06T21:00:00.000Z,
+  "dosageForm": "AEROSOL, FOAM",
+  "ingredients": Array [
+    "BUDESONIDE",
+  ],
+  "productNo": 1,
+  "rld": true,
+  "route": "RECTAL",
+  "rs": true,
+  "strength": Array [
+    "2MG/ACTUATION",
+  ],
+  "teCode": "",
+  "tradeName": "UCERIS",
+}
+`;
+
+exports[`ParseLineStream should remove federal note from strength 1`] = `
 Object {
   "accessType": "DISCN",
   "applNo": 22411,
@@ -140,7 +138,7 @@ Object {
   "approvalDate": 2010-02-01T22:00:00.000Z,
   "dosageForm": "TABLET, EXTENDED RELEASE",
   "ingredients": Array [
-    "TRAZODONE HYDROCHLORIDE",
+    "TRAZODONE HYDROCHLORIDEL",
   ],
   "productNo": 1,
   "rld": true,
