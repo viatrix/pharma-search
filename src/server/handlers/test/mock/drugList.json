@@ -1,0 +1,56 @@
+[
+    {
+      "id": 356184,
+      "tradeName": "VENLAFAXINE HYDROCHLORIDE",
+      "dosageFormId": 1668,
+      "routeId": 1093,
+      "applicantShortName": "CADILA PHARMS LTD",
+      "applType": "GENERIC",
+      "applNo": 206250,
+      "productNo": 2,
+      "teCode": "AB",
+      "approvalDate": "2012-04-23T18:25:43.511Z",
+      "rld": false,
+      "rs": false,
+      "accessType": "RX",
+      "route": { "id": 1093, "route": "ORAL" },
+      "applicant": {
+        "applicantShortName": "CADILA PHARMS LTD",
+        "applicantFullName": "CADILA PHARMACEUTICALS LTD"
+      },
+      "dosageForm": { "id": 1668, "dosageForm": "TABLET" },
+      "productIngredients": [ {
+        "id": 376908,
+        "strength": "EQ 37.5MG BASE",
+        "ingredient": { "id": 28798, "ingredient": "VENLAFAXINE HYDROCHLORIDE" }
+      }
+      ]
+    },
+    {
+      "id": 356185,
+      "tradeName": "VENLAFAXINE HYDROCHLORIDE",
+      "dosageFormId": 1668,
+      "routeId": 1093,
+      "applicantShortName": "CADILA PHARMS LTD",
+      "applType": "GENERIC",
+      "applNo": 206250,
+      "productNo": 3,
+      "teCode": "AB",
+      "approvalDate":  "2012-04-23T18:25:43.511Z",
+      "rld": "false",
+      "rs": "false",
+      "accessType": "RX",
+      "route":  { "id": 1093, "route": "ORAL" },
+      "applicant":  {
+        "applicantShortName": "CADILA PHARMS LTD",
+        "applicantFullName": "CADILA PHARMACEUTICALS LTD"
+      },
+      "dosageForm":  { "id": 1668, "dosageForm": "TABLET" },
+      "productIngredients": [ {
+        "id": 376908,
+        "strength": "EQ 37.5MG BASE",
+        "ingredient":  { "id": 28798, "ingredient": "VENLAFAXINE HYDROCHLORIDE" }
+      }
+      ]
+    }
+  ]

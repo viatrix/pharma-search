@@ -4,11 +4,13 @@
   "description": "Pharma-search (aws, serverless, typescript, postgres, typeORM)",
   "main": "handler.js",
   "scripts": {
-    "compile": "tsc --project tsconfig.json",
+    "build": "tsc --project tsconfig.json",
     "migrate": "node build/src/migrate.js",
+    "test-local": "node build/src/test_local.js",
     "eslint": "./node_modules/.bin/eslint src/**/*.{ts,spec.ts} --fix",
+    "prettier": "./node_modules/.bin/prettier src/**/*.{ts,spec.ts} --write",
     "test": "jest",
-    "precommit": "npm run eslint && npm run compile && npm run test"
+    "precommit": "npm run eslint && npm run build && npm run test"
   },
   "husky": {
     "hooks": {
@@ -17,6 +19,11 @@
   },
   "dependencies": {
     "aws-sdk": "^2.639.0",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.4.1",
+    "class-transformer": "^0.2.3",
+    "csv-parser": "^2.3.2",
+    "ejs": "^3.0.2",
     "eslint-plugin-jest": "^23.8.2",
     "pg": "^7.18.2",
     "reflect-metadata": "^0.1.13",
@@ -25,6 +32,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
+    "@types/ejs": "^3.0.2",
     "@types/jest": "^25.1.4",
     "@types/node": "^10.12.18",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
@@ -37,6 +45,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.2.3",
     "jest": "^25.1.0",
+    "prettier": "^2.0.4",
     "serverless-plugin-typescript": "^1.1.9",
     "ts-jest": "^25.1.0",
     "ts-loader": "^5.3.3",

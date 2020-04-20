@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchPage should render a page with data 1`] = `
+Object {
+  "body": "<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=\\"utf-8\\">
+        <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1, shrink-to-fit=no\\">
+
+        <!-- Bootstrap CSS -->
+        <link rel=\\"stylesheet\\" href=\\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css\\" integrity=\\"sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B\\" crossorigin=\\"anonymous\\">
+    </head>
+<body>
+
+<h1>FDA Search</h1>
+<h2>Specify search criteria:</h2>
+<form action=\\"\\" method=\\"post\\">
+    <div class=\\"form-group\\">
+        <label for=\\"tradename\\">Trade name:</label><br>
+        <input type=\\"text\\" class=\\"form-control\\" id=\\"tradename\\" name=\\"tradename\\"><br>
+    </div>
+    <div class=\\"form-group\\">
+        <label for=\\"ingredient\\">Ingredient:</label><br>
+        <input type=\\"text\\" class=\\"form-control\\" id=\\"ingredient\\" name=\\"ingredient\\">
+    </div>
+    <input type=\\"submit\\" class=\\"btn btn-primary\\" value=\\"Search\\">
+</form>
+
+    <h2>Search results:</h2>
+    <table class=\\"table table-sm\\">
+        <thead>
+        <tr>
+            <th scope=\\"col\\">Trade Name</th>
+            <th scope=\\"col\\">Dosage Form</th>
+            <th scope=\\"col\\">Route</th>
+            <th scope=\\"col\\">Applicant</th>
+            <th scope=\\"col\\">Ingredients</th>
+            <th scope=\\"col\\">Strength</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>VENLAFAXINE HYDROCHLORIDE</td>
+                <td>TABLET</td>
+                <td>ORAL</td>
+                <td>CADILA PHARMACEUTICALS LTD</td>
+                
+                    
+                    <td>VENLAFAXINE HYDROCHLORIDE</td>
+                    <td>EQ 37.5MG BASE</td>
+                </tr>
+                
+        
+            <tr>
+                <td>VENLAFAXINE HYDROCHLORIDE</td>
+                <td>TABLET</td>
+                <td>ORAL</td>
+                <td>CADILA PHARMACEUTICALS LTD</td>
+                
+                    
+                    <td>VENLAFAXINE HYDROCHLORIDE</td>
+                    <td>EQ 37.5MG BASE</td>
+                </tr>
+                
+        
+        </tbody>
+    </table>
+
+</body>
+</html>
+",
+  "headers": Object {
+    "Content-type": "text/html",
+  },
+  "statusCode": 200,
+}
+`;
