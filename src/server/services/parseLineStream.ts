@@ -43,7 +43,14 @@ export class ParseLineStream extends Transform {
   }
 
   public _transform(chunk: FileProductType, _encoding: string, callback: TransformCallback) {
-    this.push(this.parseLine(chunk));
+    try {
+      this.push(this.parseLine(chunk));
+    }
+    catch(error) {
+      if (error.name !== 'InconsistentIngredientsStrength') {
+        throw(error);
+      }
+    }
     callback();
   }
 

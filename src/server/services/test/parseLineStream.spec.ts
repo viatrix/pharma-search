@@ -303,4 +303,60 @@ describe('ParseLineStream', () => {
       expect(err.message).toEqual('Invalid access_type wrong_access_type');
     }
   });
+
+  it('should handle error', async () => {
+    const parseLineStream = new ParseLineStream();
+    const inputStream = new PassThrough({ objectMode: true });
+    const outputStream = new PassThrough({ objectMode: true });
+    const outObj: Array<ProductType> = [];
+    outputStream._write = (chunk, _encoding, callback) => {
+      outObj.push(chunk);
+      callback();
+    };
+    const testData = {
+      Ingredient: 'OLIVE OIL; SOYBEAN OIL',
+      'DF;Route': 'EMULSION;INTRAVENOUS',
+      Trade_Name: 'CLINOLIPID 20%',
+      Applicant: 'BAXTER HLTHCARE CORP',
+      Strength: '16%(160GM/1000ML);4%  (40GM/1000ML);4%  (40GM/1000ML)',
+      Appl_Type: 'N',
+      Appl_No: '204508',
+      Product_No: '001',
+      TE_Code: '',
+      Approval_Date: 'Oct 3, 2013',
+      RLD: 'Yes',
+      RS: 'Yes',
+      Type: 'RX',
+      Applicant_Full_Name: 'HOSPIRA INC'
+    };
+    const testData2 = {
+      Ingredient: 'OLIVE OIL; SOYBEAN OIL',
+      'DF;Route': 'EMULSION;INTRAVENOUS',
+      Trade_Name: 'CLINOLIPID 20%',
+      Applicant: 'BAXTER HLTHCARE CORP',
+      Strength: '16%(160GM/1000ML);4%  (40GM/1000ML)',
+      Appl_Type: 'N',
+      Appl_No: '204508',
+      Product_No: '001',
+      TE_Code: '',
+      Approval_Date: 'Oct 3, 2013',
+      RLD: 'Yes',
+      RS: 'Yes',
+      Type: 'RX',
+      Applicant_Full_Name: 'HOSPIRA INC'
+    };
+    await new Promise((resolve) => {
+      outputStream.on('finish', () => {
+        resolve();
+      });
+      inputStream
+        .pipe(parseLineStream)
+        .pipe(outputStream);
+      inputStream.write(testData);
+      inputStream.write(testData2);
+      inputStream.end();
+    });
+    expect(outObj.length).toEqual(1);
+    expect(outObj[0]).toMatchSnapshot();
+  });
 });

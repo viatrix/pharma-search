@@ -1,5 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ParseLineStream should handle error 1`] = `
+Object {
+  "accessType": "RX",
+  "applNo": 204508,
+  "applType": "ORIGINAL",
+  "applicant": "BAXTER HLTHCARE CORP",
+  "applicantFullName": "HOSPIRA INC",
+  "approvalDate": 2013-10-02T21:00:00.000Z,
+  "dosageForm": "EMULSION",
+  "ingredients": Array [
+    "OLIVE OIL",
+    "SOYBEAN OIL",
+  ],
+  "productNo": 1,
+  "rld": true,
+  "route": "INTRAVENOUS",
+  "rs": true,
+  "strength": Array [
+    "16%(160GM/1000ML)",
+    "4%  (40GM/1000ML)",
+  ],
+  "teCode": "",
+  "tradeName": "CLINOLIPID 20%",
+}
+`;
+
 exports[`ParseLineStream should parse a line with braces in single ingredient 1`] = `
 Object {
   "accessType": "RX",

@@ -1,8 +1,5 @@
 import {
   Connection,
-  ConnectionOptions,
-  createConnection,
-  DatabaseType,
   Repository
 } from 'typeorm';
 import 'reflect-metadata';
@@ -13,7 +10,6 @@ import { Ingredient } from '../db/entity/ingredients';
 import { ProductIngredient } from '../db/entity/productIngredients';
 
 import { Route } from '../db/entity/routes';
-import * as config from '../../../config.json';
 import 'pg';
 import { Writable } from 'stream';
 
@@ -50,27 +46,8 @@ export class SaveToDbService {
 
   private routesRepository: Repository<Route>;
 
-  public async init () {
-    const connectionOptions = {
-      type: config.typeorm.type as DatabaseType,
-      port: config.typeorm.port,
-      host: process.env.TYPEORM_HOST,
-      username: process.env.TYPEORM_USERNAME,
-      password: process.env.TYPEORM_PASSWORD,
-      database: process.env.TYPEORM_DATABASE,
-      synchronize: config.typeorm.synchronize,
-      logging: config.typeorm.logging,
-      entities: config.typeorm.entities,
-      migrations: config.typeorm.migrations,
-      subscribers: config.typeorm.subscribers
-    };
-    console.info(connectionOptions);
-    if (!this.connection) {
-      this.connection = await createConnection(
-        connectionOptions as ConnectionOptions
-      );
-      console.info('Created a DB connection');
-    }
+  constructor(connection: Connection) {
+    this.connection = connection;
     this.applicantsRepository = this.connection.getRepository(Applicant);
     this.dosageFormsRepository = this.connection.getRepository(DosageForm);
     this.ingredientsRepository = this.connection.getRepository(Ingredient);

@@ -1,18 +1,40 @@
 # pharma-search
 
+Searching the Orange Book (FDA list of approved drugs and ingredients).
 The project is based on Serverless, Typescript, TypeORM, Amazon RDS (Postgres).
 
+Only web interface is available for unauthorized users:
 
-#### Compile project:
+[Web interface](https://9a8cwrzroa.execute-api.eu-central-1.amazonaws.com/dev/search)
+
+
+### Developer section:
+#### Build project:
 
 ```
-npm run compile
+npm run build
+```
+#### Lint:
+
+```
+npm run eslint
 ```
 
-#### Start project locally:
+#### Prettier:
 
 ```
-npm run start
+npm run prettier
+```
+#### Execute migrations (CLI, by authorized user):
+
+```
+npm run migrate
+```
+
+#### Start project locally (for testing purposes):
+
+```
+npm run test-local
 ```
 
 #### Run tests:

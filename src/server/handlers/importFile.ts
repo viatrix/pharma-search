@@ -3,6 +3,7 @@ import 'source-map-support/register';
 import { SaveToDbService } from '../services/saveToDbService';
 import {RetrieveFileContentsS3Service} from "../services/retrieveFileContentsS3Service";
 import {ParseLineStream} from "../services/parseLineStream";
+import {connectToDb} from '../services/connectToDb';
 
 export const importFile = async (event: S3Event) => {
   if (!validateEvent(event)) {
@@ -15,8 +16,11 @@ export const importFile = async (event: S3Event) => {
   const readCsvStream = await retrieveFileContentsS3Service.createStream(key);
   console.info('Connected to the file from S3');
   const parseLineStream = new ParseLineStream();
-  const saveToDbService = new SaveToDbService();
-  await saveToDbService.init();
+
+  const connection = await connectToDb();
+  console.info('Created a DB connection');
+
+  const saveToDbService = new SaveToDbService(connection);
   console.info('Connected to DB');
   await saveToDbService.clearDb();
   console.info('Cleared DB');
@@ -30,6 +34,7 @@ export const importFile = async (event: S3Event) => {
       .pipe(parseLineStream)
       .pipe(writeStream);
   });
+  await connection.close();
 };
 
 const validateEvent = (event: S3Event): boolean => {
